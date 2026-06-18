@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply Rishta - Fill Form | Skyward Company</title>
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/MS-Brand/rishta-icon/0fc71a0f755ce86914c7c8226aed1910d3625a37/icon%20(1).png">
+    <style>
+        * { box-sizing: border-box; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+        body { background-color: #f0f4f8; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        
+        /* Layout Setup */
+        .app-container { display: flex; flex-direction: row; gap: 30px; max-width: 1350px; width: 100%; align-items: flex-start; }
+        
+        /* Control Panel (Left Side) */
+        .control-panel { flex: 1; background: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); max-height: 92vh; overflow-y: auto; width: 100%; border: 1px solid #e2e8f0; }
+        .selection-box { background: linear-gradient(145deg, #f8fafc, #f1f5f9); padding: 18px; border-radius: 12px; margin-bottom: 22px; border-left: 5px solid #3b82f6; }
+        .radio-group { display: flex; gap: 20px; margin-top: 10px; }
+        .radio-group label { display: flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer; font-size: 14px; color: #1e293b; }
+        .radio-group input[type="radio"] { width: auto; cursor: pointer; accent-color: #3b82f6; }
+        h2 { margin-top: 0; color: #0f172a; border-bottom: 2px solid #f1f5f9; padding-bottom: 12px; font-size: 24px; font-weight: 700; }
+        .form-group { margin-bottom: 16px; }
+        .nested-group { background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px dashed #cbd5e1; margin-top: 10px; }
+        label { display: block; font-weight: 600; margin-bottom: 6px; color: #475569; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
+        input[type="text"], input[type="file"], select { width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; background: #fff; color: #1e293b; transition: all 0.2s; }
+        input[type="text"]:focus { border-color: #3b82f6; outline: none; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15); }
+        .btn-download { background: linear-gradient(135deg, #1e293b, #0f172a); color: white; padding: 16px; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; width: 100%; cursor: pointer; margin-top: 20px; transition: all 0.3s; box-shadow: 0 4px 12px rgba(15,23,42,0.15); }
+        .btn-download:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(15,23,42,0.25); opacity: 0.95; }
+        
+        /* Preview Section (Right Side) */
+        .preview-section { flex: 1; display: flex; flex-direction: column; align-items: center; position: sticky; top: 20px; width: 100%; }
+        
+        /* Shared Biodata Elements */
+        .info-item { font-size: 14px; margin-bottom: 8px; display: flex; align-items: flex-start; line-height: 1.5; border-bottom: 1px dashed rgba(0,0,0,0.04); padding-bottom: 6px; }
+        .info-item:last-child { border-bottom: none; }
+        .info-item strong { display: inline-block; width: 150px; font-weight: 600; flex-shrink: 0; }
+        
+        /* ==========================================
+           💎 PREMIUM MALE CARD DESIGN (Royal Minimalist)
+           ========================================== */
+        .male-card { width: 500px; background: #ffffff; border: 2px solid #e2e8f0; border-top: 8px solid #1e293b; padding: 35px; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.06); border-radius: 4px; }
+        .male-card .main-title { font-family: 'Times New Roman', Times, serif; font-size: 28px; font-weight: 700; text-align: center; color: #1e293b; margin: 0; letter-spacing: 1px; }
+        .male-card .subtitle-bar { text-align: center; font-size: 14px; font-weight: 700; margin: 6px 0 25px 0; display: flex; justify-content: center; gap: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 2px; }
+        .male-card .rishta-tag { color: #d4af37; background: #faf7ee; padding: 2px 10px; border-radius: 20px; font-size: 12px; border: 1px solid #f3ebd4; }
+        .male-card .section-header { font-weight: 700; font-size: 13px; color: #1e293b; border-bottom: 2px solid #d4af37; padding-bottom: 4px; margin: 24px 0 14px 0; text-transform: uppercase; letter-spacing: 1.5px; display: flex; align-items: center; }
+        .male-card .info-item strong { color: #475569; }
+        .male-card .info-item span { color: #0f172a; font-weight: 500; }
+        .male-card .contact-box { margin-top: 35px; text-align: center; background: #f8fafc; border: 1px solid #e2e8f0; padding: 18px; border-radius: 8px; display: none; }
+        .male-card .contact-num { font-size: 24px; font-weight: 700; color: #1e293b; margin-top: 4px; font-family: 'Courier New', Courier, monospace; letter-spacing: 1px; }
+        .male-layout-flex { display: flex; gap: 20px; justify-content: space-between; align-items: flex-start; }
+        .male-pic-box { width: 115px; height: 145px; border: 3px double #d4af37; background: #f8fafc; flex-shrink: 0; display: none; padding: 3px; border-radius: 4px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
+        
+        /* ==========================================
+           💎 PREMIUM FEMALE CARD DESIGN (Modern Luxury Rose)
+           ========================================== */
+        .female-card { width: 500px; background: #fffcfc; border: 1px solid #fbcfe8; padding: 35px; position: relative; box-shadow: 0 15px 35px rgba(219,39,119,0.04); border-radius: 16px; background-image: radial-gradient(#fdf2f8 1.5px, transparent 1.5px), radial-gradient(#fdf2f8 1.5px, #fffcfc 1.5px); background-size: 24px 24px; background-position: 0 0, 12px 12px; }
+        .female-card .main-title { font-family: 'Georgia', serif; font-size: 24px; font-weight: 700; color: #9d174d; margin: 0; text-transform: uppercase; letter-spacing: 0.5px; }
+        .female-card .tag-container { position: absolute; top: 0; right: 35px; background: linear-gradient(135deg, #be185d, #9d174d); color: white; padding: 10px 18px; border-radius: 0 0 12px 12px; text-align: center; box-shadow: 0 4px 10px rgba(157,23,77,0.15); }
+        .female-card .section-header { background: linear-gradient(90deg, #fce7f3 0%, #fff0f6 100%); color: #9d174d; padding: 8px 14px; font-weight: 700; font-size: 13px; border-radius: 8px; margin: 24px 0 12px 0; letter-spacing: 1px; text-transform: uppercase; border-left: 4px solid #db2777; }
+        .female-card .info-item strong { color: #854d0e; color: #701a75; }
+        .female-card .info-item span { color: #3f3f46; font-weight: 500; }
+        .female-personal-flex { display: flex; gap: 20px; justify-content: space-between; align-items: flex-start; }
+        .female-pic-box { width: 115px; height: 145px; border: 1px solid #fbcfe8; background: #fff; padding: 4px; border-radius: 10px; flex-shrink: 0; display: none; box-shadow: 0 4px 12px rgba(219,39,119,0.06); }
+        
+        .preview-img { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
+        .female-card .contact-box { margin-top: 30px; background: linear-gradient(145deg, #fdf2f8, #fce7f3); padding: 15px; border-radius: 12px; text-align: center; border: 1px dashed #f472b6; display: none; }
+        .female-card .contact-num { font-size: 22px; font-weight: 700; color: #9d174d; letter-spacing: 0.5px; }
+        
+        .hidden { display: none !important; }
+
+        /* 📱 RESPONSIVE ADJUSTMENTS */
+        @media (max-width: 992px) {
+            .app-container { flex-direction: column; gap: 25px; }
+            .control-panel { max-height: unset; overflow-y: visible; padding: 20px; }
+            .preview-section { position: relative; top: 0; margin-top: 10px; width: 100%; min-height: 620px; }
+            .male-card, .female-card { transform: scale(0.88); margin-top: -30px; }
+        }
+
+        @media (max-width: 520px) {
+            body { padding: 10px; }
+            h2 { font-size: 20px; }
+            .preview-section { min-height: 500px; }
+            .male-card, .female-card { transform: scale(0.70); margin-top: -75px; margin-bottom: -70px; }
+        }
+
+        @media (max-width: 390px) {
+            .preview-section { min-height: 420px; }
+            .male-card, .female-card { transform: scale(0.58); margin-top: -110px; margin-bottom: -110px; }
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <div class="app-container">
+        <div class="control-panel">
+            <h2>Rishta Biodata Creator</h2>
+            
+            <div class="selection-box">
+                <label>Profile Gender</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="gender-select" id="gender_m" value="male" checked onchange="switchMode()"> Groom (Male)</label>
+                    <label><input type="radio" name="gender-select" id="gender_f" value="female" onchange="switchMode()"> Bride (Female)</label>
+                </div>
+            </div>
+
+            <div class="form-group" style="background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px dashed #cbd5e1;">
+                <label style="color: #475569; font-weight: bold;">Attach Picture (Optional)</label>
+                <input type="file" id="pic-uploader" accept="image/*" onchange="processImage(event)">
+            </div>
+
+            <div id="fields-wrapper">
+                
+                <div class="form-group">
+                    <label>Form ID / custom Tag</label>
+                    <input type="text" id="field_tag" placeholder="e.g., Code-450 / Rajput Family" oninput="liveRenderAll()">
+                </div>
+
+                <div style="font-weight: 700; color:#1e293b; margin: 20px 0 8px 0; border-bottom: 1px solid #f1f5f9; font-size: 12px; letter-spacing: 0.5px;">PERSONAL PARTICULARS</div>
+                
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="field_name" placeholder="Name (or hide if privacy requested)" oninput="liveRenderAll()">
+                </div>
+                <div class="form-group">
+                    <label>Age / Date of Birth</label>
+                    <input type="text" id="field_age" placeholder="e.g., 26 Years" oninput="liveRenderAll()">
+                </div>
+                <div class="form-group">
+                    <label>Height</label>
+                    <input type="text" id="field_height" placeholder="e.g., 5 Feet 8 Inches" oninput="liveRenderAll()">
+                </div>
+                <div class="form-group">
+                    <label>Marital Status</label>
+                    <input type="text" id="field_marital" placeholder="e.g., Unmarried / Divorced" oninput="liveRenderAll()">
+                </div>
+
+                <div style="font-weight: 700; color:#1e293b; margin: 20px 0 8px 0; border-bottom: 1px solid #f1f5f9; font-size: 12px; letter-spacing: 0.5px;">BACKGROUND & SETTLEMENT</div>
+                
+                <div class="form-group">
+                    <label>Current Location / City</label>
+                    <input type="text" id="field_city" placeholder="e.g., Islamabad, Pakistan" oninput="liveRenderAll()">
+                </div>
+                <div class="form-group">
+                    <label>House Status</label>
+                    <input type="text" id="field_home" placeholder="e.g., Own House (10 Marla)" oninput="liveRenderAll()">
+                </div>
+                <div class="form-group">
+                    <label>Education / Degree</label>
+                    <input type="text" id="field_edu" placeholder="e.g., Software Engineering" oninput="liveRenderAll()">
+                </div>
+                <div class="form-group">
+                    <label>Profession / Earnings</label>
+                    <input type="text" id="field_job" placeholder="e.g., Business Manager / IT Specialist" oninput="liveRenderAll()">
+                </div>
+
+                <div style="font-weight: 700; color:#1e293b; margin: 20px 0 8px 0; border-bottom: 1px solid #f1f5f9; font-size: 12px; letter-spacing: 0.5px;">FAMILY PROFILE</div>
+                
+                <div class="form-group">
+                    <label>Parents Status</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="parent_status_radio" id="p_not_alive" value="not_alive" checked onchange="toggleParentsInputs()"> Late / Deceased</label>
+                        <label><input type="radio" name="parent_status_radio" id="p_alive" value="alive" onchange="toggleParentsInputs()"> Alive</label>
+                    </div>
+                </div>
+
+                <div id="alive_inputs_wrapper" class="nested-group hidden">
+                    <div class="form-group">
+                        <label>Father's Status / Job</label>
+                        <input type="text" id="field_father_job" placeholder="e.g., Businessman / Retired" oninput="liveRenderAll()">
+                    </div>
+                    <div class="form-group">
+                        <label>Mother's Status</label>
+                        <input type="text" id="field_mother_job" placeholder="e.g., Housewife" oninput="liveRenderAll()">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Brothers Info</label>
+                    <input type="text" id="field_brothers" placeholder="e.g., 3 Brothers (2 Married)" oninput="liveRenderAll()">
+                </div>
+                <div class="form-group">
+                    <label>Sisters Info</label>
+                    <input type="text" id="field_sisters" placeholder="e.g., 1 Sister (Unmarried)" oninput="liveRenderAll()">
+                </div>
+
+                <div style="font-weight: 700; color:#1e293b; margin: 20px 0 8px 0; border-bottom: 1px solid #f1f5f9; font-size: 12px; letter-spacing: 0.5px;">RELIGIOUS IDENTITIES</div>
+                
+                <div class="form-group">
+                    <label>Religion</label>
+                    <input type="text" id="field_religion" placeholder="e.g., Islam" oninput="liveRenderAll()">
+                </div>
+                <div class="form-group">
+                    <label>Sect / Maslak</label>
+                    <input type="text" id="field_sect" placeholder="e.g., Sunni (Deoband / Barelvi)" oninput="liveRenderAll()">
+                </div>
+                <div class="form-group">
+                    <label>Caste / Clan</label>
+                    <input type="text" id="field_caste" placeholder="e.g., Sheikh / Awan" oninput="liveRenderAll()">
+                </div>
+
+                <div style="font-weight: 700; color:#1e293b; margin: 20px 0 8px 0; border-bottom: 1px solid #f1f5f9; font-size: 12px; letter-spacing: 0.5px;">PREFERENCES / REQUIREMENTS</div>
+                
+                <div class="form-group">
+                    <label>Partner Age Criteria</label>
+                    <input type="text" id="field_req_age" placeholder="e.g., 22 to 26 Years" oninput="liveRenderAll()">
+                </div>
+                <div class="form-group">
+                    <label>City Choice</label>
+                    <input type="text" id="field_req_city" placeholder="e.g., Rawalpindi / Local Only" oninput="liveRenderAll()">
+                </div>
+                <div class="form-group">
+                    <label>Caste Preferences</label>
+                    <input type="text" id="field_req_caste" placeholder="e.g., Same Caste Preferred" oninput="liveRenderAll()">
+                </div>
+                <div class="form-group">
+                    <label>Additional Demands</label>
+                    <input type="text" id="field_req_extra" placeholder="e.g., Must be well educated & family oriented" oninput="liveRenderAll()">
+                </div>
+
+                <div style="font-weight: 700; color:#1e293b; margin: 20px 0 8px 0; border-bottom: 1px solid #f1f5f9; font-size: 12px; letter-spacing: 0.5px;">OFFICIAL CONTACT</div>
+                <div class="form-group">
+                    <label>Representative Phone / WhatsApp No.</label>
+                    <input type="text" id="field_phone" placeholder="e.g., +92 300 1234567" oninput="liveRenderAll()">
+                </div>
+            </div>
+            
+            <button class="btn-download" onclick="triggerDownload()">Download Premium PNG</button>
+        </div>
+
+        <div class="preview-section">
+            <h2 style="margin-bottom: 15px;">Live Card Preview</h2>
+            
+            <div id="male-view-box" class="male-card">
+                <div class="main-title">MATRIMONIAL BIODATA</div>
+                <div class="subtitle-bar">
+                    <span>MALE PROFILE</span>
+                    <span class="rishta-tag" id="m_lbl_tag">REGISTRATION</span>
+                </div>
+
+                <div class="section-header">Personal Overview</div>
+                <div class="male-layout-flex">
+                    <div id="m_container_personal" style="flex: 1;"></div>
+                    <div class="male-pic-box" id="m_img_box">
+                        <img id="m_img_tag" class="preview-img" src="" alt="Groom Image">
+                    </div>
+                </div>
+
+                <div class="section-header">Family Background</div>
+                <div id="m_container_family"></div>
+
+                <div class="section-header">Settlement Details</div>
+                <div id="m_container_residence"></div>
+
+                <div class="section-header">Partner Expectations</div>
+                <div id="m_container_reqs"></div>
+
+                <div class="contact-box" id="m_phone_wrapper">
+                    <div style="font-size: 10px; font-weight: bold; letter-spacing: 1.5px; color: #64748b;">FOR FURTHER PROPOSAL DETAILS CONACT:</div>
+                    <div class="contact-num" id="m_lbl_phone"></div>
+                </div>
+            </div>
+
+            <div id="female-view-box" class="female-card hidden">
+                <div class="main-title">MATRIMONIAL<br>BIODATA</div>
+                <div class="tag-container">
+                    <div style="font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 1px;" id="f_lbl_tag_primary">Rishta Form</div>
+                    <div style="font-weight: 600; font-size: 11px; opacity: 0.9; margin-top: 1px;" id="f_lbl_tag_secondary">Bride</div>
+                </div>
+
+                <div class="section-header" style="margin-top: 45px;">Personal Description</div>
+                <div class="female-personal-flex">
+                    <div id="f_container_personal" style="flex:1;"></div>
+                    <div class="female-pic-box" id="f_img_box">
+                        <img id="f_img_tag" class="preview-img" src="" alt="Bride Image">
+                    </div>
+                </div>
+
+                <div class="section-header">Location & Background</div>
+                <div id="f-sub-residence"></div>
+
+                <div class="section-header">Academic & Vocational Info</div>
+                <div id="f-sub-edu"></div>
+
+                <div class="section-header">Family Network</div>
+                <div id="f-sub-family"></div>
+
+                <div class="section-header">Religious Orientation</div>
+                <div id="f-sub-religion"></div>
+
+                <div class="section-header">Preferences Requested</div>
+                <div id="f-sub-reqs"></div>
+
+                <div class="contact-box" id="f_phone_wrapper">
+                    <div style="font-size: 10px; font-weight: bold; color: #9d174d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px;">Official Coordination Point</div>
+                    <div class="contact-num" id="f_lbl_phone"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        let imgBase64Str = "";
+
+        function getMode() {
+            if(document.getElementById('gender_f').checked) {
+                return 'female';
+            }
+            return 'male';
+        }
+
+        function switchMode() {
+            const mode = getMode();
+            if (mode === 'male') {
+                document.getElementById('male-view-box').classList.remove('hidden');
+                document.getElementById('female-view-box').classList.add('hidden');
+            } else {
+                document.getElementById('male-view-box').classList.add('hidden');
+                document.getElementById('female-view-box').classList.remove('hidden');
+            }
+            applyImageToCard();
+            liveRenderAll();
+        }
+
+        function toggleParentsInputs() {
+            const isAlive = document.getElementById('p_alive').checked;
+            const wrap = document.getElementById('alive_inputs_wrapper');
+            if (isAlive) {
+                wrap.classList.remove('hidden');
+            } else {
+                wrap.classList.add('hidden');
+                document.getElementById('field_father_job').value = '';
+                document.getElementById('field_mother_job').value = '';
+            }
+            liveRenderAll();
+        }
+
+        function processImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imgBase64Str = e.target.result;
+                    applyImageToCard();
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function applyImageToCard() {
+            const mode = getMode();
+            const mBox = document.getElementById('m_img_box');
+            const fBox = document.getElementById('f_img_box');
+            
+            if (imgBase64Str) {
+                if (mode === 'male') {
+                    document.getElementById('m_img_tag').src = imgBase64Str;
+                    mBox.style.display = "block";
+                    fBox.style.display = "none";
+                } else {
+                    document.getElementById('f_img_tag').src = imgBase64Str;
+                    fBox.style.display = "block";
+                    mBox.style.display = "none";
+                }
+            } else {
+                mBox.style.display = "none";
+                fBox.style.display = "none";
+            }
+        }
+
+        function makeItem(label, text) {
+            if (!text || !text.trim()) return '';
+            return `<div class="info-item"><strong>• ${label}:</strong> <span>${text.trim()}</span></div>`;
+        }
+
+        function liveRenderAll() {
+            const mode = getMode();
+            
+            const valTag = document.getElementById('field_tag').value;
+            const valName = document.getElementById('field_name').value;
+            const valAge = document.getElementById('field_age').value;
+            const valHeight = document.getElementById('field_height').value;
+            const valMarital = document.getElementById('field_marital').value;
+            const valCity = document.getElementById('field_city').value;
+            const valHome = document.getElementById('field_home').value;
+            const valEdu = document.getElementById('field_edu').value;
+            const valJob = document.getElementById('field_job').value;
+            const valBrothers = document.getElementById('field_brothers').value;
+            const valSisters = document.getElementById('field_sisters').value;
+            const valReligion = document.getElementById('field_religion').value;
+            const valSect = document.getElementById('field_sect').value;
+            const valCaste = document.getElementById('field_caste').value;
+            const valReqAge = document.getElementById('field_req_age').value;
+            const valReqCity = document.getElementById('field_req_city').value;
+            const valReqCaste = document.getElementById('field_req_caste').value;
+            const valReqExtra = document.getElementById('field_req_extra').value;
+            const valPhone = document.getElementById('field_phone').value;
+
+            const isAlive = document.getElementById('p_alive').checked;
+            let fatherOutput = "";
+            let motherOutput = "";
+            let maleFamilySummary = "";
+
+            if (isAlive) {
+                fatherOutput = document.getElementById('field_father_job').value;
+                motherOutput = document.getElementById('field_mother_job').value;
+                maleFamilySummary = "Alive";
+                if (fatherOutput || motherOutput) {
+                    maleFamilySummary += ` (Father: ${fatherOutput || 'None'}, Mother: ${motherOutput || 'None'})`;
+                }
+            } else {
+                fatherOutput = "Late / Deceased";
+                maleFamilySummary = "Late / Deceased";
+            }
+
+            if (mode === 'male') {
+                document.getElementById('m_lbl_tag').innerText = valTag ? valTag : "REGISTRATION";
+
+                let personalHTML = '';
+                personalHTML += makeItem('Full Name', valName);
+                personalHTML += makeItem('Age Details', valAge);
+                personalHTML += makeItem('Height Factor', valHeight);
+                personalHTML += makeItem('Marital Status', valMarital);
+                personalHTML += makeItem('Belief / Sect', valReligion + (valSect ? ` (${valSect})` : ''));
+                personalHTML += makeItem('Caste / Clan', valCaste);
+                personalHTML += makeItem('Academic Degree', valEdu);
+                personalHTML += makeItem('Profession', valJob);
+                document.getElementById('m_container_personal').innerHTML = personalHTML;
+
+                let familyHTML = '';
+                if(maleFamilySummary) familyHTML += makeItem('Parents Status', maleFamilySummary);
+                familyHTML += makeItem('Brothers Details', valBrothers);
+                familyHTML += makeItem('Sisters Details', valSisters);
+                document.getElementById('m_container_family').innerHTML = familyHTML;
+
+                let resHTML = '';
+                resHTML += makeItem('House Status', valHome);
+                resHTML += makeItem('Current Location', valCity);
+                document.getElementById('m_container_residence').innerHTML = resHTML;
+
+                let reqHTML = '';
+                reqHTML += makeItem('Age Criteria', valReqAge);
+                reqHTML += makeItem('City Choice', valReqCity);
+                reqHTML += makeItem('Caste Standard', valReqCaste);
+                reqHTML += makeItem('Extra Demands', valReqExtra);
+                document.getElementById('m_container_reqs').innerHTML = reqHTML;
+
+                if (valPhone && valPhone.trim()) {
+                    document.getElementById('m_lbl_phone').innerText = valPhone;
+                    document.getElementById('m_phone_wrapper').style.display = "block";
+                } else {
+                    document.getElementById('m_phone_wrapper').style.display = "none";
+                }
+
+            } else {
+                document.getElementById('f_lbl_tag_primary').innerText = valTag ? valTag : "Rishta Form";
+                document.getElementById('f_lbl_tag_secondary').innerText = valCaste ? valCaste : "Bride";
+
+                let fPersonal = '';
+                fPersonal += makeItem('Full Name', valName);
+                fPersonal += makeItem('Age Parameters', valAge);
+                fPersonal += makeItem('Height Factor', valHeight);
+                fPersonal += makeItem('Marital Status', valMarital);
+                document.getElementById('f_container_personal').innerHTML = fPersonal;
+
+                let fRes = '';
+                fRes += makeItem('Current City', valCity);
+                fRes += makeItem('Property Status', valHome);
+                document.getElementById('f-sub-residence').innerHTML = fRes;
+
+                let fEdu = '';
+                fEdu += makeItem('Qualification', valEdu);
+                fEdu += makeItem('Work Status', valJob);
+                document.getElementById('f-sub-edu').innerHTML = fEdu;
+
+                let fFam = '';
+                if (isAlive) {
+                    if(fatherOutput) fFam += makeItem('Father Status', fatherOutput);
+                    if(motherOutput) fFam += makeItem('Mother Status', motherOutput);
+                } else {
+                    fFam += makeItem('Father/Parents', 'Late');
+                }
+                fFam += makeItem('Siblings Structure', valBrothers || valSisters ? `${valBrothers} / ${valSisters}` : '');
+                document.getElementById('f-sub-family').innerHTML = fFam;
+
+                let fRel = '';
+                fRel += makeItem('Religion Base', valReligion);
+                fRel += makeItem('Sectarian Stream', valSect);
+                fRel += makeItem('Caste Base', valCaste);
+                document.getElementById('f-sub-religion').innerHTML = fRel;
+
+                let fReq = '';
+                fReq += makeItem('Expected Clan', valReqCaste);
+                fReq += makeItem('Age Limit Upper', valReqAge);
+                fReq += makeItem('City Demanded', valReqCity);
+                if (valReqExtra) fReq += makeItem('Other Traits', valReqExtra);
+                document.getElementById('f-sub-reqs').innerHTML = fReq;
+
+                if (valPhone && valPhone.trim()) {
+                    document.getElementById('f_lbl_phone').innerText = valPhone;
+                    document.getElementById('f_phone_wrapper').style.display = "block";
+                } else {
+                    document.getElementById('f_phone_wrapper').style.display = "none";
+                }
+            }
+        }
+
+        function triggerDownload() {
+            const mode = getMode();
+            const cardId = mode === 'male' ? 'male-view-box' : 'female-view-box';
+            const cardElement = document.getElementById(cardId);
+            
+            const originalTransform = cardElement.style.transform;
+            cardElement.style.transform = "none"; 
+
+            html2canvas(cardElement, { scale: 3, useCORS: true }).then(canvas => {
+                cardElement.style.transform = originalTransform; 
+                const link = document.createElement('a');
+                link.download = `Premium_Biodata_${mode}_${Date.now()}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+
+        window.onload = () => {
+            switchMode();
+        };
+    </script>
+</body>
+</html>
